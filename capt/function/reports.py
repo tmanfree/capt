@@ -3,6 +3,7 @@
 from connector.switch import Switch
 from json_parser import JsonParser
 import time
+import sys
 
 class Reports:
 

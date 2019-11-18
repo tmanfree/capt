@@ -81,7 +81,7 @@ class Tools:
     def ap_reload (self,args, ip,port):
         time.sleep(1)  # don't test for sync status too soon (CPI delay and all that)
 
-        arg_run_list = "dnmt direct tools AP_Poke {} {} ".format(ip, port)
+        arg_run_list = "dnmt tools AP_Poke {} {} ".format(ip, port)
         if args.batch:
             arg_run_list += "-s"
 
