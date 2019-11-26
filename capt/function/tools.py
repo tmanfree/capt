@@ -73,6 +73,7 @@ class Tools:
                 logger.info(success_string)
                 # email_string += success_string + "\n"
         #logger.debug(email_string)
+        #comment
 
         logger.info("Total {} Alarms".format(len(crit_list)))
         logger.info("{} ports successfully reloaded ".format(num_successful))
