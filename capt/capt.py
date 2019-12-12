@@ -124,6 +124,8 @@ class Capt:
                     reports.dev_count(args, config, logger)
                 elif cli_parse.args.reports == 'vlanmap':
                     reports.vlanmap(args, config, logger)
+                elif cli_parse.args.reports == 'servicematrix':
+                    reports.service_matrix(args, config, logger)
             elif cli_parse.args.sub_cmd == 'mock':
                 if cli_parse.args.mock =='upgrade':
                     MockUpgradeCode(args, config, logger)
@@ -148,10 +150,14 @@ class Capt:
                 TestApi.test_method(args, config, logger)
 
             if 'email' in args and args.email is not None:
+                if 'reports' in args and args.csv:
+                    with open(reports.filename + '.csv', 'r') as file:
+                        data = file.read()
 
-                with open(config.logpath, 'r') as file:
-                    #data = file.read().replace('\n', '')
-                    data = file.read()
+                else:
+                    with open(config.logpath, 'r') as file:
+                        #data = file.read().replace('\n', '')
+                        data = file.read()
 
                 try:
                     smtpObj = smtplib.SMTP(config.email_host)
