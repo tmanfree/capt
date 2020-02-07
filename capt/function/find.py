@@ -232,7 +232,7 @@ class Find:
                     desc_list=args.description.split(",")
 
 #                    if values_dict['description'] in dev_int['description']:
-                    if all (x in dev_int['description'] for x in desc_list):
+                    if all (x.casefold() in dev_int['description'].casefold() for x in desc_list):
                         dev_found_interfaces.append(dev_int)
             ######
             logger.info("switch name :{}".format(neigh_name))
