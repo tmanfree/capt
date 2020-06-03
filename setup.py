@@ -11,7 +11,7 @@ URL = 'https://github.com/tmanfree/capt'
 EMAIL = 'tmanfree@hotmail.com'
 AUTHOR = 'Thomas Mandzie'
 REQUIRES_PYTHON = '>=3.5.0'
-VERSION = '0.2.1'
+VERSION = '0.2.2'
 
 setup(name=NAME,
       version=VERSION,

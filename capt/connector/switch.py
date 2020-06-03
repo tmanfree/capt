@@ -19,6 +19,12 @@ class Switch(Connector):
         payload = {"syncDevicesDTO": {"devices": {"device": [{"address": "{}".format(dev_ipv4_address)}]}}}
         result = self.error_handling(requests.post, 5, url, False, self.username, self.password, payload)
 
+    def sync_multiple(self,dev_ipv4_list):
+        url = "https://{}/webacs/api/v4/op/devices/syncDevices.json".format(self.cpi_ipv4_address)
+        payload = {"syncDevicesDTO": {"devices": {"device": dev_ipv4_list}}}
+        result = self.error_handling(requests.post, 5, url, False, self.username, self.password, payload)
+
+
     # --- PUT calls (usually requires templates built in Prime to execute)
 
     def reload(self, dev_id, timeout):
@@ -120,6 +126,22 @@ class Switch(Connector):
                         }]
                     },
                     "templateName": "API_CALL_conf_if_bas"
+                }
+            }
+        result = self.error_handling(requests.put, 5, url, False, self.username, self.password, payload)
+        key_list = ['mgmtResponse', 'cliTemplateCommandJobResult', 0, 'jobName']
+        return self.parse_json.value(result.json(), key_list, self.logger)
+
+    def conf_template(self, dev_ids, template_name):
+        url = "https://{}/webacs/api/v3/op/cliTemplateConfiguration/deployTemplateThroughJob.json".format(
+            self.cpi_ipv4_address)
+        payload = \
+            {
+                "cliTemplateCommand": {
+                    "targetDevices": {
+                        "targetDevice": dev_ids
+                    },
+                    "templateName": template_name
                 }
             }
         result = self.error_handling(requests.put, 5, url, False, self.username, self.password, payload)
