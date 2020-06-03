@@ -15,6 +15,39 @@ class Push:
 
         self.find = Find()
 
+    def template(self, args, config, ipaddr, logger):
+        # find and display (update this call to work)
+        dev_id = self.find.dev_id(args, config, ipaddr, logger)
+
+        # require 'yes' input to proceed
+        # logger.info('Activate BAS on switch  INTERFACE {} using VLAN: {}'.format(found_int['name'], args.vlan))
+        # response = input("Confirm action of changing VLAN ('yes'):")
+        # if not response == 'yes':
+        #     logger.info('Did not proceed with change.')
+        #     sys.exit(1)
+
+        # invoke API call to change VLAN
+        sw_api_call = Switch(config, logger)  # create API switch call object
+
+        # push API_CALL_conf_if_bas template out. Update this to use a shared template, the same as change vlan?
+        job_id = sw_api_call.conf_template(dev_id, args.template_name)
+
+        timeout = time.time() + 30  # 30 second timeout starting now
+        time.sleep(1) # without the sleep the job_complete can balk, not finding the job_id yet
+        while not sw_api_call.job_complete(job_id):
+            time.sleep(5)
+            if time.time() > timeout:
+                logger.critical("Template push failed. Prime job not completed")
+                sys.exit(1)
+        if not sw_api_call.job_successful(job_id):
+            logger.critical("Template push failed. Prime job not successful")
+            sys.exit(1)
+
+        logger.info('Template push complete.')
+
+
+        return args
+
 
 
     def bas(self, args, config, logger):
@@ -29,7 +62,8 @@ class Push:
             sys.exit(1)
 
         # invoke API call to change VLAN
-        sw_api_call = Switch(config.username, config.password, config.cpi_ipv4_address, logger) # create API switch call object
+        # sw_api_call = Switch(config.username, config.password, config.cpi_ipv4_address, logger) # create API switch call object
+        sw_api_call = Switch(config, logger)  # create API switch call object
 
         # push API_CALL_conf_if_bas template out. Update this to use a shared template, the same as change vlan?
         job_id = sw_api_call.conf_if_bas(dev_id, found_int['name'], args.description, args.vlan)

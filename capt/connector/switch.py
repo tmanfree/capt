@@ -126,6 +126,24 @@ class Switch(Connector):
         key_list = ['mgmtResponse', 'cliTemplateCommandJobResult', 0, 'jobName']
         return self.parse_json.value(result.json(), key_list, self.logger)
 
+    def conf_template(self, dev_id, template_name):
+        url = "https://{}/webacs/api/v3/op/cliTemplateConfiguration/deployTemplateThroughJob.json".format(
+            self.cpi_ipv4_address)
+        payload = \
+            {
+                "cliTemplateCommand": {
+                    "targetDevices": {
+                        "targetDevice": [{
+                            "targetDeviceID": "{}".format(dev_id)
+                        }]
+                    },
+                    "templateName": template_name
+                }
+            }
+        result = self.error_handling(requests.put, 5, url, False, self.username, self.password, payload)
+        key_list = ['mgmtResponse', 'cliTemplateCommandJobResult', 0, 'jobName']
+        return self.parse_json.value(result.json(), key_list, self.logger)
+
 
     # --- GET calls
 

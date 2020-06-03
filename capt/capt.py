@@ -74,8 +74,11 @@ class Capt:
                         try:
                             logger = self.set_logger(args.reports, logging.INFO, log_file)
                         except AttributeError:
-                            sys_logger.critical("Address and description not found.")
-                            sys.exit(1)
+                            try:
+                                logger = self.set_logger(args.push, logging.INFO, log_file)
+                            except AttributeError:
+                                # sys_logger.critical("Address and description not found.")
+                                sys.exit(1)
             # if'email' in args and args.email is not None:
             #     self.set_logger_email(config, args.email,logger)
 
@@ -112,6 +115,17 @@ class Capt:
                 push = Push()
                 if cli_parse.args.push == 'bas' :
                     push.bas(args, config, logger)
+                elif cli_parse.args.push == 'template':
+                    try:
+                        file = open(os.path.join(args.file_name), "r")
+                        for ip in file:
+                            push.template(args,config,ip,logger)
+                        file.close()
+                    except FileNotFoundError:
+                        print("##### ERROR iplist files not found #####")
+                    except Exception as err:
+                        print("##### ERROR with processing:{} #####".format(err))
+
             elif cli_parse.args.sub_cmd == 'poke':
                 poke = Poke()
                 if cli_parse.args.poke == 'port':

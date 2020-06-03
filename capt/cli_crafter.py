@@ -103,6 +103,11 @@ class CliCrafter:
         self.desc_flag_arg(push_bas)
       #  push_bas.set_defaults(func=CliParser.push_bas)
 
+        # ----- capt push template -a W.W.W.W -p X/X/X -v YYYY -d "ZZZZZZ"
+        push_template = self.template_parser(push_sp)
+        self.template_name_arg(push_template)
+        self.file_arg(push_template)
+
         # ----- capt tools sub-commands -----
         # ----- capt tools apcheck
         tools_ap = self.apcheck_subparser(tools_sp)
@@ -164,6 +169,9 @@ class CliCrafter:
 
     def bas_parser(self, sp):
         return sp.add_parser('bas', help="Enable a BAS port")
+
+    def template_parser(self, sp):
+        return sp.add_parser('template', help="push a template")
 
     def change_parser(self, sp):
         return sp.add_parser('change', help="change switch configuration")
@@ -301,11 +309,17 @@ class CliCrafter:
     def email_arg(self, p):
         p.add_argument('-e', '--email', help="email to log to ")
 
+    def file_arg(self, p):
+        p.add_argument('file_name', help="specify the name of the ip file")
+
     def int_arg(self, p):
         p.add_argument('interface', help="specify the device interface")
 
     def vlan_arg(self, p):
         p.add_argument('-v', '--vlan', help="specify the new client VLAN ID", required=True)
+
+    def template_name_arg(self, p):
+        p.add_argument('template_name', help="specify the name of the template")
 
     def building_filter_arg(self, p):
         p.add_argument('building_filter', help="Specify building or all,")

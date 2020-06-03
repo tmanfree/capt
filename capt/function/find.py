@@ -18,6 +18,16 @@ class Find:
 
         self.parse_json = JsonParser()
 
+    def dev_id(self,args,config, ipaddr, logger):
+        # 400 critical error is thrown if description is not found
+        api_call = Switch(config, logger)
+        # check address to see if hostname or IP
+        if "-" in ipaddr:
+            dev_id = api_call.id_by_hostname(ipaddr.strip())
+        else:
+            dev_id = api_call.id_by_ip(ipaddr.strip())
+
+        return dev_id
 
     #def ip_client(self, values_dict, cpi_username, cpi_password, cpi_ipv4_address, logger):
     def ip_client(self, args, config, logger):
