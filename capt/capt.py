@@ -116,15 +116,7 @@ class Capt:
                 if cli_parse.args.push == 'bas' :
                     push.bas(args, config, logger)
                 elif cli_parse.args.push == 'template':
-                    try:
-                        file = open(os.path.join(args.file_name), "r")
-                        for ip in file:
-                            push.template(args,config,ip,logger)
-                        file.close()
-                    except FileNotFoundError:
-                        print("##### ERROR iplist files not found #####")
-                    except Exception as err:
-                        print("##### ERROR with processing:{} #####".format(err))
+                    push.template(args,config,logger)
 
             elif cli_parse.args.sub_cmd == 'poke':
                 poke = Poke()
